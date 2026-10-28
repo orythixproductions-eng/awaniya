@@ -1,0 +1,2081 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EventEase — Discover. Connect. Experience.</title>
+
+<style>
+:root {
+  --bg: #f7f7fc;
+  --surface: #ffffff;
+  --surface2: #f1efff;
+  --text: #211b38;
+  --muted: #77738b;
+  --primary: #7057e8;
+  --primary-dark: #5740c8;
+  --accent: #ffb86b;
+  --border: #e8e4f3;
+  --success: #16845b;
+  --danger: #cf4057;
+  --shadow: 0 14px 40px rgba(47, 32, 99, .09);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+}
+
+button, input, textarea, select { font: inherit; }
+button { cursor: pointer; }
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 3px solid rgba(112, 87, 232, .25);
+  outline-offset: 2px;
+}
+
+a { color: inherit; text-decoration: none; }
+.hidden { display: none !important; }
+.muted { color: var(--muted); }
+.small { font-size: 12px; }
+.container { width: min(1160px, calc(100% - 36px)); margin: auto; }
+
+header {
+  position: sticky;
+  z-index: 20;
+  top: 0;
+  background: rgba(255,255,255,.9);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav {
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 21px;
+  font-weight: 850;
+  letter-spacing: -.7px;
+  white-space: nowrap;
+}
+
+.brand-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  color: white;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #947aff, #5b42cf);
+  box-shadow: 0 7px 18px #7057e83d;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex: 1;
+}
+
+.nav-links button {
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  padding: 10px 12px;
+  border-radius: 11px;
+  font-weight: 650;
+}
+
+.nav-links button:hover,
+.nav-links button.active {
+  color: var(--primary);
+  background: var(--surface2);
+}
+
+.nav-actions { display: flex; align-items: center; gap: 9px; }
+.user-label { font-size: 13px; color: var(--muted); }
+
+.btn {
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 11px 16px;
+  font-weight: 750;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  transition: transform .2s, box-shadow .2s, background .2s;
+}
+
+.btn:hover { transform: translateY(-2px); }
+
+.btn-primary {
+  color: white;
+  background: linear-gradient(135deg, #8168f3, #6248d3);
+  box-shadow: 0 7px 16px #7057e82c;
+}
+
+.btn-primary:hover { box-shadow: 0 10px 23px #7057e845; }
+
+.btn-light {
+  color: var(--text);
+  background: white;
+  border-color: var(--border);
+}
+
+.btn-light:hover { background: var(--surface2); }
+
+.btn-soft { color: var(--primary); background: var(--surface2); }
+.btn-danger { color: white; background: var(--danger); }
+.btn-success { color: white; background: var(--success); }
+.btn-small { padding: 8px 12px; font-size: 13px; }
+.btn-block { width: 100%; }
+
+main { min-height: 70vh; padding-bottom: 65px; }
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  margin-top: 30px;
+  padding: 58px 48px;
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at 85% 15%, #bcaaff75, transparent 30%),
+    radial-gradient(circle at 70% 110%, #ffc79d66, transparent 35%),
+    linear-gradient(125deg, #f0edff, #fff5ed 95%);
+  border: 1px solid #ece5ff;
+  animation: rise .6s ease both;
+}
+
+.hero::after {
+  content: "✦";
+  position: absolute;
+  right: 8%;
+  top: 9%;
+  font-size: 100px;
+  color: #9a86ef42;
+  animation: float 5s ease-in-out infinite;
+}
+
+.eyebrow {
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.hero h1 {
+  position: relative;
+  z-index: 1;
+  font-size: clamp(35px, 5vw, 59px);
+  line-height: 1.08;
+  letter-spacing: -2.4px;
+  max-width: 670px;
+  margin: 16px 0;
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, #7155e8, #b45fd3);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero p { max-width: 580px; color: #69637e; font-size: 16px; }
+.hero-buttons { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 25px; position: relative; z-index: 2; }
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 23px 0 34px;
+}
+
+.stat {
+  padding: 19px 22px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 17px;
+}
+
+.stat strong { display: block; font-size: 25px; letter-spacing: -.8px; }
+.stat span { color: var(--muted); font-size: 13px; }
+
+.section-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 15px;
+  margin: 35px 0 17px;
+}
+
+.section-head h2 { margin: 0; font-size: 26px; letter-spacing: -.7px; }
+.section-head p { margin: 5px 0 0; color: var(--muted); font-size: 14px; }
+
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin: 24px 0 38px;
+}
+
+.action-panel {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 21px;
+  padding: 24px;
+  box-shadow: 0 5px 22px #2f206308;
+  transition: transform .25s, box-shadow .25s;
+}
+
+.action-panel:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+
+.action-icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  background: var(--surface2);
+  border-radius: 16px;
+  font-size: 25px;
+  margin-bottom: 14px;
+}
+
+.action-panel h3 { margin: 0 0 7px; font-size: 21px; }
+.action-panel p { color: var(--muted); font-size: 14px; margin: 0 0 19px; }
+.action-panel .btn { width: 100%; }
+
+.code-form { display: flex; gap: 8px; }
+.code-form input { min-width: 0; flex: 1; text-transform: uppercase; }
+
+.search-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 17px 0;
+}
+
+.field {
+  width: 100%;
+  padding: 12px 13px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: #fff;
+  color: var(--text);
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.field:focus { border-color: #9a88ef; box-shadow: 0 0 0 3px #7057e814; }
+.search-field { flex: 1; min-width: 210px; }
+.search-row select { width: auto; min-width: 155px; }
+
+.event-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 19px;
+}
+
+.event-card {
+  overflow: hidden;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 19px;
+  transition: transform .25s, box-shadow .25s;
+  animation: rise .4s ease both;
+}
+
+.event-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+
+.event-cover {
+  height: 145px;
+  padding: 18px;
+  display: flex;
+  align-items: end;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #dcd4ff, #fce3d0);
+}
+
+.event-cover::before, .event-cover::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: #ffffff44;
+}
+
+.event-cover::before { width: 180px; height: 180px; top: -80px; right: -30px; }
+.event-cover::after { width: 95px; height: 95px; top: 36px; right: 60px; }
+.event-cover .cover-emoji { position: relative; z-index: 1; font-size: 43px; filter: drop-shadow(0 4px 6px #473c6b18); }
+
+.cover-art { background: linear-gradient(135deg, #ffd7d2, #ffe9bd); }
+.cover-tech { background: linear-gradient(135deg, #c9dcff, #e7dcff); }
+.cover-social { background: linear-gradient(135deg, #c9f2e3, #dce7ff); }
+.cover-food { background: linear-gradient(135deg, #ffdfb8, #ffcee3); }
+.cover-game { background: linear-gradient(135deg, #d8d1ff, #bcefe9); }
+
+.event-content { padding: 17px; }
+.tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  background: var(--surface2);
+  color: var(--primary);
+  border-radius: 100px;
+  padding: 4px 9px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.tag.pending { background: #fff0d9; color: #99601a; }
+.tag.approved { background: #dff8eb; color: #16754d; }
+.tag.cancelled { background: #ffe5e8; color: #b52e48; }
+
+.event-content h3 { margin: 0 0 8px; font-size: 18px; line-height: 1.3; }
+.event-description { font-size: 13px; color: var(--muted); min-height: 39px; margin: 0 0 14px; }
+.event-meta { display: grid; gap: 7px; font-size: 12px; color: #6d6880; margin: 13px 0 17px; }
+.event-meta span { display: flex; gap: 7px; align-items: start; }
+.event-actions { display: flex; gap: 8px; }
+.event-actions .btn { flex: 1; padding: 10px 8px; font-size: 12px; }
+
+.page { padding-top: 31px; animation: rise .3s ease both; }
+.page-title { font-size: 31px; margin: 0; letter-spacing: -1px; }
+.page-subtitle { margin: 5px 0 23px; color: var(--muted); }
+
+.empty {
+  padding: 48px 20px;
+  text-align: center;
+  background: white;
+  border: 1px dashed #d7d0ed;
+  border-radius: 20px;
+  color: var(--muted);
+}
+.empty .empty-icon { font-size: 40px; margin-bottom: 8px; }
+.empty h3 { color: var(--text); margin: 6px 0; }
+
+.form-layout { max-width: 780px; margin: auto; }
+.form-card {
+  padding: 27px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+}
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 17px; }
+.form-group { display: flex; flex-direction: column; gap: 7px; }
+.form-group.full { grid-column: 1 / -1; }
+.form-group label { font-size: 13px; font-weight: 750; }
+.form-group small { color: var(--muted); }
+.form-actions { display: flex; justify-content: end; gap: 9px; margin-top: 22px; flex-wrap: wrap; }
+
+.notice {
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 13px;
+  margin: 15px 0;
+  background: var(--surface2);
+  color: #5f4bc1;
+}
+
+.detail-layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; }
+.detail-panel { background: white; border: 1px solid var(--border); border-radius: 20px; padding: 24px; }
+.detail-cover { min-height: 190px; border-radius: 16px; display: grid; place-items: center; font-size: 76px; margin-bottom: 20px; background: linear-gradient(135deg, #ded5ff, #ffe3ce); }
+.detail-panel h2 { margin: 7px 0 12px; line-height: 1.2; }
+.detail-info { display: grid; gap: 13px; margin: 20px 0; }
+.detail-info div { display: flex; gap: 10px; align-items: start; }
+.detail-info span { color: var(--muted); font-size: 14px; }
+.code-box { background: var(--surface2); border: 1px dashed #c4b6ff; border-radius: 13px; padding: 16px; text-align: center; margin: 16px 0; }
+.code-box strong { display: block; color: var(--primary); font-size: 26px; letter-spacing: 3px; }
+.code-box span { font-size: 12px; color: var(--muted); }
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(27, 21, 52, .5);
+  backdrop-filter: blur(5px);
+  animation: fade .2s ease;
+}
+
+.modal {
+  width: min(480px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 23px;
+  padding: 26px;
+  box-shadow: 0 25px 90px #17102d45;
+  animation: pop .25s ease;
+}
+
+.modal-top { display: flex; justify-content: space-between; gap: 15px; align-items: start; }
+.modal-top h2 { margin: 0; font-size: 24px; }
+.close-btn { border: 0; border-radius: 10px; background: var(--surface2); padding: 8px 11px; color: var(--text); }
+.modal-form { display: grid; gap: 14px; margin-top: 20px; }
+.modal-form label { display: grid; gap: 6px; font-size: 13px; font-weight: 750; }
+.modal-form input { width: 100%; }
+.modal-switch { font-size: 13px; text-align: center; color: var(--muted); margin-top: 16px; }
+.text-button { border: 0; background: transparent; color: var(--primary); font-weight: 800; }
+
+#toast {
+  position: fixed;
+  bottom: 22px;
+  left: 50%;
+  z-index: 100;
+  transform: translate(-50%, 25px);
+  opacity: 0;
+  pointer-events: none;
+  background: #241d3e;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 13px;
+  box-shadow: var(--shadow);
+  transition: .25s;
+  max-width: calc(100% - 30px);
+  font-size: 13px;
+}
+#toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+footer { padding: 25px 0; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; }
+.footer-inner { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(13px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pop { from { opacity: 0; transform: scale(.96) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+@keyframes float { 0%,100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-12px) rotate(8deg); } }
+
+@media (max-width: 900px) {
+  .nav { gap: 12px; flex-wrap: wrap; padding: 12px 0; }
+  .nav-links { order: 3; width: 100%; overflow-x: auto; flex: none; }
+  .nav-links button { white-space: nowrap; }
+  .nav-actions { margin-left: auto; }
+  .event-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hero { padding: 42px 30px; }
+}
+
+@media (max-width: 620px) {
+  .container { width: min(100% - 24px, 1160px); }
+  .hero { padding: 32px 22px; border-radius: 22px; margin-top: 16px; }
+  .hero h1 { letter-spacing: -1.5px; }
+  .hero::after { font-size: 60px; right: 5%; }
+  .stats { gap: 8px; }
+  .stat { padding: 13px 10px; }
+  .stat strong { font-size: 21px; }
+  .stat span { font-size: 11px; }
+  .action-grid { grid-template-columns: 1fr; }
+  .event-grid { grid-template-columns: 1fr; }
+  .event-cover { height: 160px; }
+  .section-head { align-items: start; flex-direction: column; }
+  .form-grid { grid-template-columns: 1fr; }
+  .form-group.full { grid-column: auto; }
+  .form-card { padding: 18px; }
+  .detail-layout { grid-template-columns: 1fr; }
+  .code-form { flex-direction: column; }
+  .code-form .btn { width: 100%; }
+  .user-label { display: none; }
+  .nav-actions .btn { padding: 9px 10px; font-size: 12px; }
+}
+
+.qr-box { background: var(--surface); border: 1px solid var(--border); border-radius: 13px; padding: 16px; text-align: center; margin: 16px 0; }
+.qr-frame { display: inline-block; background: #fff; padding: 12px; border-radius: 10px; border: 1px solid var(--border); line-height: 0; }
+.qr-frame img, .qr-frame canvas { display: block; }
+.qr-box span { display: block; margin-top: 10px; font-size: 12px; color: var(--muted); }
+.hero::after { display: none; }
+.hero { padding: 44px 40px; }
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.step { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px; }
+.step b { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--surface2); color: var(--primary); margin-bottom: 8px; }
+.step h3 { margin: 0 0 4px; font-size: 17px; }
+.step p { margin: 0; color: var(--muted); font-size: 14px; }
+.auth-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; background: var(--surface2); padding: 4px; border-radius: 12px; margin: 14px 0 6px; }
+.auth-tabs button { border: 0; background: transparent; padding: 9px; border-radius: 9px; font-weight: 750; color: var(--muted); }
+.auth-tabs button.on { background: #fff; color: var(--primary); box-shadow: 0 2px 8px #2f20631a; }
+.auth-error { background: #fdecef; color: var(--danger); border-radius: 10px; padding: 9px 12px; font-size: 13px; font-weight: 650; margin: 10px 0; }
+.show-pw { display: flex !important; flex-direction: row !important; align-items: center; gap: 8px; font-weight: 500 !important; font-size: 13px; color: var(--muted); }
+.demo-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+.demo-label { text-align: center; font-size: 12px; color: var(--muted); margin-top: 16px; }
+@media (max-width: 640px) { .steps { grid-template-columns: 1fr; } }
+.scan-box video { width: 100%; max-width: 420px; border-radius: 14px; background: #1b1530; display: block; aspect-ratio: 4 / 3; object-fit: cover; }
+.scan-result { margin-top: 14px; padding: 12px 14px; border-radius: 12px; font-size: 14px; }
+.scan-result.ok { background: #e3f6ec; color: #0f5a3e; }
+.scan-result.bad { background: #fdecef; color: var(--danger); }
+.att-list { display: grid; gap: 10px; margin-top: 10px; }
+.att { display: flex; justify-content: space-between; align-items: center; gap: 12px; background: var(--surface2); padding: 11px 14px; border-radius: 12px; }
+.g-btn { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 12px; padding: 11px; border: 1px solid var(--border); border-radius: 12px; background: #fff; color: var(--text); font-weight: 750; }
+.g-btn svg { width: 18px; height: 18px; }
+.detail-row { display: flex; justify-content: space-between; gap: 14px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+.detail-row span:first-child { color: var(--muted); }
+.detail-row span:last-child { text-align: right; font-weight: 650; word-break: break-word; }
+.otp-code { font-size: 24px; letter-spacing: 4px; font-weight: 800; color: var(--primary); }
+.preset-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+.g-btn:hover { background: var(--surface2); }
+.or-line { text-align: center; font-size: 12px; color: var(--muted); margin: 12px 0 2px; }
+@media print { header, .btn, #toast { display: none !important; } }
+</style>
+</head>
+
+<body>
+<header>
+  <div class="container nav">
+    <a class="brand" href="#" onclick="navigate('home');return false;">
+      <span class="brand-icon">✦</span>
+      <span>EventEase</span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <button id="nav-home" class="active" onclick="navigate('home')">Home</button>
+      <button id="nav-explore" onclick="navigate('explore')">Explore Events</button>
+      <button id="nav-create" class="hidden" onclick="navigate('create')">Create Event</button>
+      <button id="nav-mine" class="hidden" onclick="navigate('mine')">My Events</button>
+      <button id="nav-me" class="hidden" onclick="navigate('me')">Me</button>
+      <button id="nav-inbox" class="hidden" onclick="navigate('inbox')">Inbox</button>
+      <button id="nav-scan" onclick="navigate('scan')">Scan QR</button>
+    </nav>
+
+    <div class="nav-actions">
+      <span id="user-label" class="user-label"></span>
+      <button id="login-button" class="btn btn-light" onclick="showAuth('login')">Log in</button>
+      <button id="signup-button" class="btn btn-primary" onclick="showAuth('register')">Sign up</button>
+      <button id="logout-button" class="btn btn-light hidden" onclick="logout()">Log out</button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <div id="app"></div>
+</main>
+
+<footer>
+  <div class="container footer-inner">
+    <span><strong>EventEase</strong> — Discover. Connect. Experience.</span>
+    <span>Prototype: data is saved in this browser only</span>
+  </div>
+</footer>
+
+<div id="modal-root"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
+<script>
+"use strict";
+
+/* =========================================================
+   EVENTEASE: SIMPLE BROWSER-BASED EVENT MANAGEMENT PROTOTYPE
+   ========================================================= */
+
+const STORAGE = {
+  user: "eventease_user_v2",
+  events: "eventease_events_v2",
+  registrations: "eventease_registrations_v2",
+  notifications: "eventease_notifications_v2",
+  accounts: "eventease_accounts_v2"
+};
+
+const demoAccounts = [
+  { id: "user_alex", name: "Alex Morgan", email: "alex@demo.com", password: "demo123", role: "admin" },
+  { id: "user_maya", name: "Maya Santos", email: "maya@demo.com", password: "demo123", role: "admin" },
+  { id: "user_jordan", name: "Jordan Lee", email: "jordan@demo.com", password: "demo123", role: "user" }
+];
+
+const seedEvents = [
+  {
+    id: "event_art",
+    title: "Creative Art Workshop",
+    description: "Explore your creativity through painting, sketching, and hands-on activities. Beginners are welcome.",
+    date: futureDate(5),
+    time: "14:00",
+    location: "Campus Activity Room",
+    category: "Art",
+    emoji: "🎨",
+    cover: "cover-art",
+    capacity: 30,
+    code: "ART204",
+    creatorId: "user_alex",
+    creatorName: "Alex Morgan",
+    status: "published",
+    attendees: ["user_maya", "user_jordan"],
+    createdAt: Date.now() - 500000
+  },
+  {
+    id: "event_tech",
+    title: "Tech Connect Meetup",
+    description: "Meet fellow technology enthusiasts, exchange ideas, and learn about new digital tools.",
+    date: futureDate(8),
+    time: "10:00",
+    location: "Innovation Lab",
+    category: "Technology",
+    emoji: "💻",
+    cover: "cover-tech",
+    capacity: 50,
+    code: "TECH27",
+    creatorId: "user_maya",
+    creatorName: "Maya Santos",
+    status: "published",
+    attendees: ["user_alex"],
+    createdAt: Date.now() - 400000
+  },
+  {
+    id: "event_sunset",
+    title: "Sunset Social Gathering",
+    description: "Take a break, meet new friends, enjoy music, and make memories together.",
+    date: futureDate(12),
+    time: "16:30",
+    location: "University Garden",
+    category: "Social",
+    emoji: "🌅",
+    cover: "cover-social",
+    capacity: 40,
+    code: "SUNSET9",
+    creatorId: "user_maya",
+    creatorName: "Maya Santos",
+    status: "published",
+    attendees: ["user_alex", "user_maya"],
+    createdAt: Date.now() - 300000
+  },
+  {
+    id: "event_food",
+    title: "Campus Food Fest",
+    description: "Discover local snacks, share your favorite food, and enjoy a friendly campus food gathering.",
+    date: futureDate(15),
+    time: "11:00",
+    location: "Main Quadrangle",
+    category: "Food",
+    emoji: "🍜",
+    cover: "cover-food",
+    capacity: 80,
+    code: "COFFEE14",
+    creatorId: "user_alex",
+    creatorName: "Alex Morgan",
+    status: "published",
+    attendees: [],
+    createdAt: Date.now() - 200000
+  },
+  {
+    id: "event_game",
+    title: "Friendly Gaming Day",
+    description: "Join casual games, meet other players, and enjoy a relaxed gaming session.",
+    date: futureDate(20),
+    time: "13:00",
+    location: "Student Lounge",
+    category: "Gaming",
+    emoji: "🎮",
+    cover: "cover-game",
+    capacity: 24,
+    code: "GAME12",
+    creatorId: "user_maya",
+    creatorName: "Maya Santos",
+    status: "published",
+    attendees: ["user_jordan"],
+    createdAt: Date.now() - 100000
+  }
+];
+
+function futureDate(days) {
+  const date = new Date();
+  date.setDate(date.getDate() + days);
+  return date.toISOString().slice(0, 10);
+}
+
+function loadJSON(key, fallback) {
+  try {
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : fallback;
+  } catch (error) {
+    console.warn("Could not read saved data:", key, error);
+    return fallback;
+  }
+}
+
+function saveJSON(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
+}
+
+let accounts = loadJSON(STORAGE.accounts, demoAccounts);
+let currentUser = loadJSON(STORAGE.user, null);
+accounts.forEach(a => { if (!a.role) a.role = (a.id === "user_alex" || a.id === "user_maya") ? "admin" : "user"; });
+if (currentUser && !currentUser.role) { const a = accounts.find(x => x.id === currentUser.id); currentUser.role = a ? a.role : "user"; }
+let events = loadJSON(STORAGE.events, null);
+let registrations = loadJSON(STORAGE.registrations, []);
+let notifications = loadJSON(STORAGE.notifications, []);
+if (!Array.isArray(notifications)) notifications = [];
+
+if (!Array.isArray(accounts) || !accounts.length) accounts = demoAccounts;
+if (!Array.isArray(events)) events = seedEvents;
+if (!Array.isArray(registrations)) registrations = [];
+
+saveJSON(STORAGE.accounts, accounts);
+saveJSON(STORAGE.events, events);
+saveJSON(STORAGE.registrations, registrations);
+
+let currentPage = "home";
+let activeEventId = null;
+let pendingJoin = null;
+let toastTimeout = null;
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+function formatDate(value) {
+  if (!value) return "Date to be announced";
+  const date = new Date(value + "T12:00:00");
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleDateString(undefined, {
+    month: "short", day: "numeric", year: "numeric"
+  });
+}
+
+function formatTime(value) {
+  if (!value) return "Time to be announced";
+  const parts = value.split(":");
+  const date = new Date();
+  date.setHours(Number(parts[0]), Number(parts[1] || 0), 0, 0);
+  return date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+}
+
+function saveEvents() {
+  saveJSON(STORAGE.events, events);
+}
+
+function saveRegistrations() {
+  saveJSON(STORAGE.registrations, registrations);
+}
+
+function isAdmin() {
+  return !!currentUser && currentUser.role === "admin";
+}
+
+function isLoggedIn() {
+  return Boolean(currentUser && currentUser.id);
+}
+
+function getEvent(id) {
+  return events.find(item => item.id === id);
+}
+
+function isAttending(event) {
+  if (!currentUser) return false;
+  return event.attendees.includes(currentUser.id) ||
+    registrations.some(r => r.eventId === event.id && r.userId === currentUser.id);
+}
+
+function attendeeCount(event) {
+  return event.attendees.length;
+}
+
+function availableSpots(event) {
+  return Math.max(0, Number(event.capacity) - attendeeCount(event));
+}
+
+function makeId(prefix) {
+  return prefix + "_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
+function makeEventCode() {
+  let code;
+  do {
+    code = Math.random().toString(36).slice(2, 7).toUpperCase();
+  } while (events.some(item => item.code === code));
+  return code;
+}
+
+function toast(message) {
+  const element = document.getElementById("toast");
+  element.textContent = message;
+  element.classList.add("show");
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => element.classList.remove("show"), 2800);
+}
+
+function closeModal() {
+  document.getElementById("modal-root").innerHTML = "";
+}
+
+function updateNavigation() {
+  const loggedIn = isLoggedIn();
+
+  document.getElementById("login-button").classList.toggle("hidden", loggedIn);
+  document.getElementById("signup-button").classList.toggle("hidden", loggedIn);
+  document.getElementById("logout-button").classList.toggle("hidden", !loggedIn);
+  document.getElementById("nav-create").classList.toggle("hidden", !isAdmin());
+  document.getElementById("nav-mine").classList.toggle("hidden", !loggedIn);
+  document.getElementById("nav-me").classList.toggle("hidden", !loggedIn || isAdmin());
+  const inboxBtn = document.getElementById("nav-inbox");
+  inboxBtn.classList.toggle("hidden", !loggedIn || isAdmin());
+  const unread = loggedIn ? notifications.filter(n => n.userId === currentUser.id && !n.read).length : 0;
+  inboxBtn.textContent = unread ? "Inbox (" + unread + ")" : "Inbox";
+  document.getElementById("user-label").textContent = loggedIn
+    ? currentUser.name.split(" ")[0] + (isAdmin() ? " (organizer)" : "")
+    : "";
+  document.getElementById("nav-mine").textContent = isAdmin() ? "My Events" : "My Tickets";
+
+  ["home", "explore", "create", "mine", "me", "inbox", "scan"].forEach(page => {
+    const button = document.getElementById("nav-" + page);
+    if (button) button.classList.toggle("active", currentPage === page);
+  });
+}
+
+function navigate(page) {
+  if ((page === "create" || page === "mine" || page === "me" || page === "inbox") && !isLoggedIn()) {
+    showAuth("login", page === "create" ? "Organizers log in to create events." : "Log in to see your events and tickets.");
+    return;
+  }
+  if (page === "create" && !isAdmin()) {
+    toast("Only organizer accounts can create events.");
+    return;
+  }
+
+  currentPage = page;
+  closeModal();
+  render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function render() {
+  if (currentPage !== "scan") stopScan();
+  updateNavigation();
+  const app = document.getElementById("app");
+
+  if (currentPage === "home") app.innerHTML = renderHome();
+  else if (currentPage === "explore") app.innerHTML = renderExplore();
+  else if (currentPage === "create") app.innerHTML = renderCreateForm();
+  else if (currentPage === "mine") app.innerHTML = renderMyEvents();
+  else if (currentPage === "me") app.innerHTML = renderProfile();
+  else if (currentPage === "inbox") app.innerHTML = renderInbox();
+  else if (currentPage === "scan") app.innerHTML = renderScan();
+  else if (currentPage === "details") app.innerHTML = renderEventDetails(activeEventId);
+  else {
+    currentPage = "home";
+    app.innerHTML = renderHome();
+  }
+
+  if (currentPage === "explore") applyEventFilters();
+  if (currentPage === "details") drawQR();
+}
+
+function drawQR() {
+  ["qr-target", "ticket-qr"].forEach(id => {
+    const target = document.getElementById(id);
+    if (!target) return;
+    if (typeof QRCode === "undefined") { target.textContent = "QR code could not load."; return; }
+    target.innerHTML = "";
+    new QRCode(target, { text: target.dataset.url, width: 168, height: 168, correctLevel: QRCode.CorrectLevel.M });
+  });
+}
+
+/* ---------------- HOME PAGE ---------------- */
+
+function renderHome() {
+  const published = events.filter(e => e.status === "published");
+  const steps = isAdmin()
+    ? [["Create", "Add the date, place and number of seats."], ["Share", "Send the code, link or QR code."], ["Track", "Watch seats fill as people register."]]
+    : [["Find", "Browse events or enter an invitation code."], ["Register", "Log in and join with one click."], ["Attend", "Your events appear in My Tickets."]];
+
+  return `
+    <section class="hero">
+      <h1>Find an event.<br><span class="gradient-text">Join in a few taps.</span></h1>
+      <p>${isAdmin() ? "You are logged in as an organizer. Create events and share them with a code, link or QR code." : "Browse seminars, activities and workshops, then register with your account."}</p>
+      <div class="hero-buttons">
+        <button class="btn btn-primary" onclick="navigate('explore')">Explore events</button>
+        ${isAdmin()
+          ? `<button class="btn btn-light" onclick="navigate('create')">＋ Create an event</button>`
+          : isLoggedIn() ? "" : `<button class="btn btn-light" onclick="showAuth('login')">Log in</button>`}
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head"><div><h2>How it works</h2></div></div>
+      <div class="steps">
+        ${steps.map((st, i) => `<div class="step"><b>${i + 1}</b><h3>${st[0]}</h3><p>${st[1]}</p></div>`).join("")}
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head"><div><h2>Have an invitation code?</h2><p>Enter it to open the event.</p></div></div>
+      <form class="code-form" onsubmit="joinByCode(event)">
+        <input class="field" name="eventCode" required maxlength="20" placeholder="e.g. ART204" aria-label="Event code">
+        <button class="btn btn-primary" type="submit">Find event</button>
+      </form>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <div><h2>Upcoming events</h2></div>
+        <button class="btn btn-light btn-small" onclick="navigate('explore')">View all</button>
+      </div>
+      <div class="event-grid">
+        ${published.slice().sort((a,b) => a.date.localeCompare(b.date)).slice(0,3).map(eventCard).join("")}
+      </div>
+    </section>`;
+}
+
+/* ---------------- EVENT CARDS ---------------- */
+
+function eventCard(event) {
+  const joined = isAttending(event);
+  const full = availableSpots(event) <= 0;
+  const creator = isAdmin() && currentUser.id === event.creatorId;
+  const cover = event.cover || "cover-social";
+  const emoji = event.emoji || "🎉";
+
+  return `
+    <article class="event-card">
+      <div class="event-cover ${escapeHTML(cover)}">
+        <span class="cover-emoji">${escapeHTML(emoji)}</span>
+      </div>
+      <div class="event-content">
+        <div class="tag-row">
+          <span class="tag">${escapeHTML(event.category || "General")}</span>
+          ${full ? `<span class="tag cancelled">Full</span>` : ""}
+        </div>
+        <h3>${escapeHTML(event.title)}</h3>
+        <p class="event-description">${escapeHTML(event.description)}</p>
+        <div class="event-meta">
+          <span>📅 ${escapeHTML(formatDate(event.date))} · ${escapeHTML(formatTime(event.time))}</span>
+          <span>📍 ${escapeHTML(event.location)}</span>
+          <span>👥 ${attendeeCount(event)} / ${Number(event.capacity)} attending</span>
+        </div>
+        <div class="event-actions">
+          <button class="btn btn-light" onclick="showEventDetails('${event.id}')">View details</button>
+          ${joined
+            ? `<button class="btn btn-soft" disabled>✓ Joined</button>`
+            : (creator || isAdmin())
+              ? `<button class="btn btn-soft" onclick="showEventDetails('${event.id}')">${creator ? "Your event" : "Organizer view"}</button>`
+              : `<button class="btn ${full ? "btn-light" : "btn-primary"}" ${full ? "disabled" : ""} onclick="joinEvent('${event.id}')">${full ? "Full" : "Join Event"}</button>`}
+        </div>
+      </div>
+    </article>`;
+}
+
+/* ---------------- EXPLORE PAGE ---------------- */
+
+function renderExplore() {
+  return `
+    <section class="page">
+      <div class="eyebrow">Discover something new</div>
+      <h1 class="page-title">Explore Events</h1>
+      <p class="page-subtitle">Find events that match your interests and join the experience.</p>
+
+      <div class="search-row">
+        <input id="event-search" class="field search-field" placeholder="Search events, places, or interests..." oninput="applyEventFilters()">
+        <select id="event-category" class="field" onchange="applyEventFilters()" aria-label="Filter by category">
+          <option value="all">All categories</option>
+          <option value="Art">Art</option>
+          <option value="Technology">Technology</option>
+          <option value="Social">Social</option>
+          <option value="Food">Food</option>
+          <option value="Gaming">Gaming</option>
+          <option value="Education">Education</option>
+          <option value="Sports">Sports</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div id="explore-results" class="event-grid"></div>
+    </section>`;
+}
+
+function applyEventFilters() {
+  const results = document.getElementById("explore-results");
+  if (!results) return;
+
+  const search = (document.getElementById("event-search")?.value || "").trim().toLowerCase();
+  const category = document.getElementById("event-category")?.value || "all";
+
+  const found = events.filter(event => {
+    if (event.status !== "published") return false;
+    const text = [event.title, event.description, event.location, event.category, event.creatorName]
+      .join(" ").toLowerCase();
+    return text.includes(search) && (category === "all" || event.category === category);
+  }).sort((a,b) => a.date.localeCompare(b.date));
+
+  results.innerHTML = found.length
+    ? found.map(eventCard).join("")
+    : `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🔎</div><h3>No events found</h3><p>Try another search term or category.</p></div>`;
+}
+
+/* ---------------- CREATE EVENT ---------------- */
+
+function renderCreateForm() {
+  if (isLoggedIn() && !isAdmin()) {
+    return `<section class="page"><div class="empty"><h3>Organizer accounts only</h3><p>Participants can browse and register for events.</p><button class="btn btn-primary" onclick="navigate('explore')">Explore events</button></div></section>`;
+  }
+  if (!isLoggedIn()) {
+    return `<section class="page"><div class="empty"><h3>Please log in first</h3><button class="btn btn-primary" onclick="showAuth('login')">Log in</button></div></section>`;
+  }
+
+  return `
+    <section class="page form-layout">
+      <div class="eyebrow">Bring people together</div>
+      <h1 class="page-title">Create an Event</h1>
+      <p class="page-subtitle">Fill in the event details. Your published event will receive a unique code that guests can use to find it.</p>
+
+      <div class="form-card">
+        <form id="create-event-form" onsubmit="submitEvent(event)">
+          <div class="form-grid">
+            <div class="form-group full">
+              <label for="event-title">Event name *</label>
+              <input id="event-title" class="field" name="title" maxlength="90" required placeholder="e.g. Weekend Art Workshop">
+            </div>
+
+            <div class="form-group full">
+              <label for="event-description">Description *</label>
+              <textarea id="event-description" class="field" name="description" rows="4" maxlength="600" required placeholder="What is your event about? Who should attend?"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="event-date">Date *</label>
+              <input id="event-date" class="field" name="date" type="date" min="${futureDate(0)}" required>
+            </div>
+
+            <div class="form-group">
+              <label for="event-time">Start time *</label>
+              <input id="event-time" class="field" name="time" type="time" required>
+            </div>
+
+            <div class="form-group full">
+              <label for="event-location">Location *</label>
+              <input id="event-location" class="field" name="location" maxlength="120" required placeholder="Enter the venue or online meeting location">
+            </div>
+
+            <div class="form-group">
+              <label for="event-category">Category *</label>
+              <select id="event-category" class="field" name="category" required>
+                <option value="">Choose a category</option>
+                <option>Art</option>
+                <option>Technology</option>
+                <option>Social</option>
+                <option>Food</option>
+                <option>Gaming</option>
+                <option>Education</option>
+                <option>Sports</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="event-capacity">Maximum attendees *</label>
+              <input id="event-capacity" class="field" name="capacity" type="number" min="1" max="10000" value="30" required>
+              <small>Includes the event organizer only if they register separately.</small>
+            </div>
+          </div>
+
+          <div class="notice">🔑 A unique event code will be generated after creation. Guests can enter the code on the Home page to find your event.</div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-light" onclick="navigate('home')">Cancel</button>
+            <button type="submit" class="btn btn-primary">＋ Publish Event</button>
+          </div>
+        </form>
+      </div>
+    </section>`;
+}
+
+function submitEvent(event) {
+  if (!isAdmin()) { event.preventDefault(); toast("Only organizer accounts can create events."); return; }
+  event.preventDefault();
+
+  if (!isLoggedIn()) {
+    showAuth("login");
+    toast("Log in to create an event.");
+    return;
+  }
+
+  const form = event.target;
+  const data = new FormData(form);
+  const title = String(data.get("title") || "").trim();
+  const description = String(data.get("description") || "").trim();
+  const date = String(data.get("date") || "");
+  const time = String(data.get("time") || "");
+  const location = String(data.get("location") || "").trim();
+  const category = String(data.get("category") || "");
+  const capacity = Number(data.get("capacity"));
+
+  if (!title || !description || !date || !time || !location || !category) {
+    toast("Please complete all required fields.");
+    return;
+  }
+
+  if (date < futureDate(0)) {
+    toast("Please choose today or a future date.");
+    return;
+  }
+
+  if (!Number.isInteger(capacity) || capacity < 1 || capacity > 10000) {
+    toast("Enter a valid capacity between 1 and 10,000.");
+    return;
+  }
+
+  const icons = {
+    Art: ["🎨", "cover-art"],
+    Technology: ["💻", "cover-tech"],
+    Social: ["🌅", "cover-social"],
+    Food: ["🍜", "cover-food"],
+    Gaming: ["🎮", "cover-game"],
+    Education: ["📚", "cover-tech"],
+    Sports: ["⚽", "cover-social"],
+    Other: ["🎉", "cover-art"]
+  };
+
+  const appearance = icons[category] || icons.Other;
+
+  const newEvent = {
+    id: makeId("event"),
+    title,
+    description,
+    date,
+    time,
+    location,
+    category,
+    emoji: appearance[0],
+    cover: appearance[1],
+    capacity,
+    code: makeEventCode(),
+    creatorId: currentUser.id,
+    creatorName: currentUser.name,
+    status: "published",
+    attendees: [],
+    createdAt: Date.now()
+  };
+
+  events.unshift(newEvent);
+  saveEvents();
+
+  activeEventId = newEvent.id;
+  currentPage = "details";
+  render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  toast("Event published successfully!");
+}
+
+/* ---------------- JOIN EVENT BY CODE ---------------- */
+
+function joinByCode(event) {
+  event.preventDefault();
+
+  const input = event.target.elements.eventCode;
+  const code = String(input.value || "").trim().toUpperCase();
+
+  if (!code) {
+    toast("Enter an event code first.");
+    return;
+  }
+
+  const foundEvent = events.find(item =>
+    String(item.code).toUpperCase() === code &&
+    item.status === "published"
+  );
+
+  if (!foundEvent) {
+    toast("Event not found. Please check the code.");
+    return;
+  }
+
+  input.value = "";
+  showEventDetails(foundEvent.id);
+  toast("Event found! Review the details to continue.");
+}
+
+/* ---------------- JOIN AN EVENT ---------------- */
+
+function joinEvent(id) {
+  const event = getEvent(id);
+
+  if (!event || event.status !== "published") {
+    toast("This event is not available.");
+    return;
+  }
+
+  if (!isLoggedIn()) {
+    pendingJoin = id;
+    showAuth("login", "Log in to register for this event.");
+    return;
+  }
+
+  if (isAdmin()) {
+    toast("Organizer accounts manage events. Use a participant account to register.");
+    return;
+  }
+
+  if (isAttending(event)) {
+    toast("You have already joined this event.");
+    showEventDetails(id);
+    return;
+  }
+
+  if (availableSpots(event) <= 0) {
+    toast("Sorry, this event is full.");
+    return;
+  }
+
+  const acc0 = accounts.find(a => a.id === currentUser.id);
+  if (!acc0 || !acc0.occupation) { pendingJoin = id; showOccupation(); return; }
+
+  showRegForm(id);
+}
+
+function showRegForm(id) {
+  const event = getEvent(id);
+  const acc = accounts.find(a => a.id === currentUser.id) || {};
+  const v = { name: acc.name || currentUser.name, phone: acc.phone || "", email: acc.contactEmail || currentUser.email };
+  document.getElementById("modal-root").innerHTML = `
+    <div class="modal-backdrop" onclick="if(event.target===this)closeModal()">
+      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="reg-title">
+        <div class="modal-top">
+          <div><h2 id="reg-title" style="margin:0 0 4px">Confirm your registration</h2><p class="muted small" style="margin:0">${escapeHTML(event.title)}<br>${escapeHTML(formatDate(event.date))}, ${escapeHTML(event.location)}</p></div>
+          <button class="close-btn" aria-label="Close" onclick="closeModal()">✕</button>
+        </div>
+        <p class="muted small">Check your details. They come from your Me page, and you can change them for this event.</p>
+        <div id="auth-error" class="auth-error hidden" role="alert"></div>
+        <form class="modal-form" onsubmit="confirmJoin(event,'${id}')" novalidate>
+          <label>Full name<input class="field" name="name" value="${escapeHTML(v.name)}" autocomplete="name"></label>
+          <label>Phone number<input class="field" name="phone" type="tel" value="${escapeHTML(v.phone)}" placeholder="0917 123 4567" autocomplete="tel"></label>
+          <label>Email<input class="field" name="email" type="email" value="${escapeHTML(v.email)}" placeholder="you@gmail.com" autocomplete="email"></label>
+          ${occBlock(acc.occupation, acc.occInfo)}
+          <label class="show-pw"><input type="checkbox" name="save" checked> Save these details to my Me page</label>
+          <button class="btn btn-primary btn-block" type="submit">Yes, register me</button>
+        </form>
+      </section>
+    </div>`;
+  document.querySelector("#modal-root input").focus();
+}
+
+function readDetails(form) {
+  const d = new FormData(form);
+  return { name: String(d.get("name") || "").trim(), phone: String(d.get("phone") || "").trim(), email: String(d.get("email") || "").trim(), occupation: String(d.get("occupation") || ""), occInfo: readOcc(form, String(d.get("occupation") || "")), save: !!d.get("save") };
+}
+
+function checkDetails(d) {
+  if (d.name.length < 2) return ["Enter your full name.", "name"];
+  if (!/^[+\d][\d\s()-]{6,}$/.test(d.phone)) return ["Enter a valid phone number.", "phone"];
+  if (!/^\S+@\S+\.\S+$/.test(d.email)) return ["Enter a valid email address.", "email"];
+  if (!d.occupation) return ["Choose your occupation.", "occupation"];
+  const op = occProblem(d.occupation, d.occInfo);
+  if (op) return op;
+  return null;
+}
+
+function confirmJoin(e, id) {
+  e.preventDefault();
+  const event = getEvent(id);
+  const d = readDetails(e.target);
+  const problem = checkDetails(d);
+  if (problem) return authError(problem[0], problem[1]);
+  if (!event || isAttending(event)) { closeModal(); return; }
+  if (availableSpots(event) <= 0) { closeModal(); toast("Sorry, this event is full."); return; }
+  requirePhoneOtp(d, () => completeJoin(id, d));
+}
+
+function completeJoin(id, d) {
+  const event = getEvent(id);
+  if (!event || isAttending(event) || availableSpots(event) <= 0) { closeModal(); return; }
+
+  event.attendees.push(currentUser.id);
+  registrations.push({
+    id: makeId("registration"), eventId: event.id, userId: currentUser.id,
+    registeredAt: new Date().toISOString(), status: "confirmed", checkedIn: false,
+    details: { name: d.name, phone: d.phone, email: d.email, occupation: d.occupation, occInfo: d.occInfo }
+  });
+
+  if (d.save) {
+    const acc = accounts.find(a => a.id === currentUser.id);
+    if (acc) { acc.name = d.name; acc.phone = d.phone; acc.contactEmail = d.email; acc.occupation = d.occupation; acc.occInfo = d.occInfo; saveJSON(STORAGE.accounts, accounts); }
+  }
+
+  saveEvents();
+  saveRegistrations();
+  closeModal();
+  activeEventId = id;
+  currentPage = "details";
+  render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  toast("You are registered. Your ticket is below.");
+}
+
+function ticketBox(event) {
+  const r = currentUser && registrations.find(x => x.eventId === event.id && x.userId === currentUser.id);
+  if (!r) return "";
+  return `<div class="qr-box"><div class="qr-frame"><div id="ticket-qr" data-url="EE:T:${escapeHTML(r.id)}"></div></div><span>Your ticket. Show this QR code at the door.</span></div>`;
+}
+
+function attendeeList(event) {
+  const regs = registrations.filter(r => r.eventId === event.id);
+  return `<div class="section-head" style="margin-top:26px"><div><h2 style="margin:0">Attendees (${regs.length})</h2></div>
+    <button class="btn btn-primary btn-small" ${regs.length ? "" : "disabled"} onclick="showReminder('${event.id}')">Send reminder</button></div>` + (regs.length
+    ? `<div class="att-list">${regs.map(r => { const d = r.details || {}; return `
+      <div class="att"><div><strong>${escapeHTML(d.name || "Participant")}</strong><br>
+        <span class="muted small">${escapeHTML(d.occupation || "No occupation yet")}</span></div>
+        <button class="btn btn-light btn-small" onclick="viewAttendee('${escapeHTML(r.id)}')">View details</button></div>`; }).join("")}</div>`
+    : `<p class="muted">No registrations yet. Share the code, link or QR code.</p>`);
+}
+
+function normPhone(p) { return String(p || "").replace(/[^\d+]/g, ""); }
+
+function occLabel(occ, key) {
+  const f = (OCC[occ] || []).find(x => x[0] === key);
+  return f ? f[1] : key;
+}
+
+function viewAttendee(regId) {
+  if (!isAdmin()) return;
+  const r = registrations.find(x => x.id === regId);
+  if (!r) return;
+  const ev = getEvent(r.eventId), d = r.details || {};
+  const acc = accounts.find(a => a.id === r.userId) || {};
+  const verified = d.phone && (acc.verifiedPhones || []).includes(normPhone(d.phone));
+  const rows = [["Name", d.name], ["Phone", d.phone ? d.phone + (verified ? " (verified)" : " (not verified)") : ""], ["Email", d.email], ["Occupation", d.occupation]]
+    .concat(Object.keys(d.occInfo || {}).map(k => [occLabel(d.occupation, k), d.occInfo[k]]))
+    .concat([["Registered", new Date(r.registeredAt).toLocaleString()]]);
+  document.getElementById("modal-root").innerHTML = `
+    <div class="modal-backdrop" onclick="if(event.target===this)closeModal()">
+      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="va-title">
+        <div class="modal-top"><div><h2 id="va-title" style="margin:0 0 4px">${escapeHTML(d.name || "Participant")}</h2><p class="muted small" style="margin:0">${escapeHTML(ev ? ev.title : "")}</p></div>
+          <button class="close-btn" aria-label="Close" onclick="closeModal()">✕</button></div>
+        <div style="margin:12px 0">${rows.filter(x => x[1]).map(x => `<div class="detail-row"><span>${escapeHTML(x[0])}</span><span>${escapeHTML(x[1])}</span></div>`).join("")}</div>
+        <button class="btn btn-light btn-block" onclick="closeModal()">Close</button>
+      </section>
+    </div>`;
+}
+
+/* ---------------- REMINDERS AND INBOX ---------------- */
+
+function reminderText(ev, when) {
+  return 'Reminder: "' + ev.title + '" starts ' + when + ", " + formatDate(ev.date) + " at " + formatTime(ev.time) + ", " + ev.location + ". Please bring your ticket QR code.";
+}
+
+function showReminder(eventId) {
+  const ev = getEvent(eventId);
+  if (!ev || !isAdmin()) return;
+  const n = registrations.filter(r => r.eventId === eventId).length;
+  document.getElementById("modal-root").innerHTML = `
+    <div class="modal-backdrop" onclick="if(event.target===this)closeModal()">
+      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="rm-title">
+        <div class="modal-top"><div><h2 id="rm-title" style="margin:0 0 4px">Send a reminder</h2><p class="muted small" style="margin:0">${escapeHTML(ev.title)}</p></div>
+          <button class="close-btn" aria-label="Close" onclick="closeModal()">✕</button></div>
+        <p class="muted small">Goes to the inbox of all ${n} registered ${n === 1 ? "person" : "people"}. Pick a time, then edit the message if you like.</p>
+        <div class="preset-row">
+          ${["in 1 day", "in 1 hour", "in 15 minutes", "now"].map(w => `<button type="button" class="btn btn-soft btn-small" onclick="document.getElementById('rem-text').value = reminderText(getEvent('${ev.id}'), '${w}')">${w === "now" ? "Starting now" : "Starts " + w}</button>`).join("")}
+        </div>
+        <div id="auth-error" class="auth-error hidden" role="alert"></div>
+        <form class="modal-form" onsubmit="sendReminder(event,'${ev.id}')" novalidate>
+          <label>Message<textarea id="rem-text" name="message" class="field" rows="5">${escapeHTML(reminderText(ev, "in 1 day"))}</textarea></label>
+          <button class="btn btn-primary btn-block" type="submit">Send to ${n} ${n === 1 ? "person" : "people"}</button>
+        </form>
+        <p class="muted small">Prototype: reminders appear in each participant's Inbox. Real email or SMS needs a server.</p>
+      </section>
+    </div>`;
+}
+
+function sendReminder(e, eventId) {
+  e.preventDefault();
+  const text = String(new FormData(e.target).get("message") || "").trim();
+  if (text.length < 5) return authError("Write a message first.", "message");
+  const regs = registrations.filter(r => r.eventId === eventId);
+  const now = new Date().toISOString();
+  regs.forEach(r => notifications.push({ id: makeId("note"), eventId, userId: r.userId, message: text, sentAt: now, read: false }));
+  saveJSON(STORAGE.notifications, notifications);
+  closeModal();
+  toast("Reminder sent to " + regs.length + (regs.length === 1 ? " person." : " people."));
+}
+
+function renderInbox() {
+  const mine = notifications.filter(n => n.userId === currentUser.id).sort((a, b) => b.sentAt.localeCompare(a.sentAt));
+  const fresh = new Set(mine.filter(n => !n.read).map(n => n.id));
+  setTimeout(() => {
+    let changed = false;
+    mine.forEach(n => { if (!n.read) { n.read = true; changed = true; } });
+    if (changed) { saveJSON(STORAGE.notifications, notifications); updateNavigation(); }
+  }, 0);
+  return `
+    <section class="page" style="max-width:640px">
+      <h1 class="page-title">Inbox</h1>
+      <p class="page-subtitle">Reminders from the organizers of events you joined.</p>
+      ${mine.length ? mine.map(n => { const ev = getEvent(n.eventId); return `
+        <article class="action-panel" style="margin-bottom:12px">
+          <div class="tag-row">${fresh.has(n.id) ? `<span class="tag approved">New</span>` : ""}<span class="tag">${escapeHTML(ev ? ev.title : "Event")}</span></div>
+          <p style="margin:8px 0">${escapeHTML(n.message)}</p>
+          <p class="muted small" style="margin:0 0 10px">${escapeHTML(new Date(n.sentAt).toLocaleString())}</p>
+          ${ev ? `<button class="btn btn-light btn-small" onclick="showEventDetails('${ev.id}')">Open event</button>` : ""}
+        </article>`; }).join("") : `<div class="empty"><div class="empty-icon">📭</div><h3>No messages yet</h3><p>When an organizer sends a reminder, it shows up here.</p></div>`}
+    </section>`;
+}
+
+/* ---------------- PHONE OTP ---------------- */
+
+let otp = null;
+
+function requirePhoneOtp(d, then) {
+  const acc = accounts.find(a => a.id === currentUser.id) || {};
+  const phone = normPhone(d.phone);
+  if ((acc.verifiedPhones || []).includes(phone)) { then(); return; }
+  otp = { phone, shown: d.phone, code: "", tries: 0, then };
+  sendOtp();
+}
+
+function sendOtp() {
+  otp.code = String(Math.floor(100000 + Math.random() * 900000));
+  otp.tries = 0;
+  document.getElementById("modal-root").innerHTML = `
+    <div class="modal-backdrop">
+      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="otp-title">
+        <h2 id="otp-title" style="margin:0 0 4px">Verify your phone number</h2>
+        <p class="muted small">We sent a 6-digit code to <strong>${escapeHTML(otp.shown)}</strong>.</p>
+        <div class="hint-box" style="background:var(--surface2);border-radius:12px;padding:12px;text-align:center;margin:10px 0">
+          <span class="small muted">Prototype: no text message is sent. Your code is</span><br><span class="otp-code">${otp.code}</span>
+        </div>
+        <div id="auth-error" class="auth-error hidden" role="alert"></div>
+        <form class="modal-form" onsubmit="checkOtp(event)" novalidate>
+          <label>Enter the code<input class="field" name="otp" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="6 digits"></label>
+          <button class="btn btn-primary btn-block" type="submit">Verify and continue</button>
+          <button class="btn btn-light btn-block" type="button" onclick="sendOtp()">Send a new code</button>
+          <button class="btn btn-light btn-block" type="button" onclick="otp = null; closeModal()">Cancel</button>
+        </form>
+      </section>
+    </div>`;
+  const input = document.querySelector('#modal-root [name="otp"]');
+  if (input) input.focus();
+}
+
+function checkOtp(e) {
+  e.preventDefault();
+  if (!otp) return;
+  const v = String(new FormData(e.target).get("otp") || "").trim();
+  if (!/^\d{6}$/.test(v)) return authError("Enter the 6-digit code.", "otp");
+  if (v !== otp.code) {
+    otp.tries++;
+    if (otp.tries >= 5) { otp = null; closeModal(); toast("Too many wrong codes. Please try again."); return; }
+    return authError("That code is wrong. " + (5 - otp.tries) + " tries left.", "otp");
+  }
+  const acc = accounts.find(a => a.id === currentUser.id);
+  if (acc) { acc.verifiedPhones = (acc.verifiedPhones || []).concat(otp.phone); saveJSON(STORAGE.accounts, accounts); }
+  const next = otp.then;
+  otp = null;
+  closeModal();
+  toast("Phone number verified.");
+  next();
+}
+
+const GLOGO = '<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>';
+
+/* ---------------- OCCUPATION AND GOOGLE SIGN-IN ---------------- */
+
+const OCC = {
+  "Student": [["idNumber", "Student ID"], ["school", "School or university"], ["level", "Grade or year level"]],
+  "Teacher or school staff": [["idNumber", "Employee ID"], ["school", "School"], ["department", "Department or subject"]],
+  "Employee": [["company", "Company"], ["position", "Job title"]],
+  "Other": [["details", "What do you do?"]]
+};
+
+function occFieldsHTML(occ, vals) {
+  return (OCC[occ] || []).map(f => `<label>${f[1]}<input class="field" name="occ_${f[0]}" value="${escapeHTML((vals || {})[f[0]] || "")}"></label>`).join("");
+}
+
+function occBlock(occ, vals) {
+  return `<label>Occupation<select class="field" name="occupation" onchange="document.getElementById('occ-fields').innerHTML = occFieldsHTML(this.value, {})">
+    <option value="">Choose one</option>${Object.keys(OCC).map(k => `<option ${k === occ ? "selected" : ""}>${k}</option>`).join("")}</select></label>
+    <div id="occ-fields" style="display:grid;gap:12px">${occFieldsHTML(occ, vals)}</div>`;
+}
+
+function readOcc(form, occ) {
+  const d = new FormData(form), out = {};
+  (OCC[occ] || []).forEach(f => { out[f[0]] = String(d.get("occ_" + f[0]) || "").trim(); });
+  return out;
+}
+
+function occProblem(occ, info) {
+  for (const f of OCC[occ] || []) if (!info[f[0]]) return ["Enter your " + f[1].toLowerCase() + ".", "occ_" + f[0]];
+  return null;
+}
+
+function showOccupation() {
+  document.getElementById("modal-root").innerHTML = `
+    <div class="modal-backdrop">
+      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="occ-title">
+        <h2 id="occ-title" style="margin:0 0 4px">Tell us about you</h2>
+        <p class="muted small">Pick your occupation. We ask for the details event organizers need, such as a student ID.</p>
+        <div id="auth-error" class="auth-error hidden" role="alert"></div>
+        <form class="modal-form" onsubmit="saveOccupation(event)" novalidate>
+          ${occBlock("", {})}
+          <button class="btn btn-primary btn-block" type="submit">Save and continue</button>
+          <button class="btn btn-light btn-block" type="button" onclick="pendingJoin = null; closeModal()">Do this later</button>
+        </form>
+      </section>
+    </div>`;
+}
+
+function saveOccupation(e) {
+  e.preventDefault();
+  const occ = String(new FormData(e.target).get("occupation") || "");
+  if (!occ) return authError("Choose your occupation.", "occupation");
+  const info = readOcc(e.target, occ);
+  const problem = occProblem(occ, info);
+  if (problem) return authError(problem[0], problem[1]);
+  const acc = accounts.find(a => a.id === currentUser.id);
+  if (!acc) return;
+  acc.occupation = occ;
+  acc.occInfo = info;
+  saveJSON(STORAGE.accounts, accounts);
+  closeModal();
+  toast("Saved. You can change this on your Me page.");
+  const join = pendingJoin;
+  pendingJoin = null;
+  if (join) joinEvent(join);
+}
+
+function showGoogle() {
+  document.getElementById("modal-root").innerHTML = `
+    <div class="modal-backdrop" onclick="if(event.target===this)closeModal()">
+      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="g-title">
+        <div class="modal-top"><h2 id="g-title" style="margin:0;display:flex;align-items:center;gap:10px">${GLOGO} Continue with Google</h2><button class="close-btn" aria-label="Close" onclick="closeModal()">✕</button></div>
+        <p class="muted small">Prototype only: this simulates Google sign-in and does not contact Google. Signing in with Google always creates a participant account, which can register for events but not create them.</p>
+        <div id="auth-error" class="auth-error hidden" role="alert"></div>
+        <form class="modal-form" onsubmit="googleSubmit(event)" novalidate>
+          <label>Your name<input class="field" name="name" autocomplete="name"></label>
+          <label>Gmail address<input class="field" name="email" type="email" placeholder="you@gmail.com" autocomplete="email"></label>
+          <button class="btn btn-primary btn-block" type="submit">Continue</button>
+          <button class="btn btn-light btn-block" type="button" onclick="showAuth('login')">Back</button>
+        </form>
+      </section>
+    </div>`;
+  document.querySelector("#modal-root input").focus();
+}
+
+function googleSubmit(e) {
+  e.preventDefault();
+  const d = new FormData(e.target);
+  const name = String(d.get("name") || "").trim();
+  const email = String(d.get("email") || "").trim().toLowerCase();
+  if (name.length < 2) return authError("Enter your name.", "name");
+  if (!/^[^\s@]+@(gmail|googlemail)\.com$/.test(email)) return authError("Enter a Gmail address, like name@gmail.com.", "email");
+  let acc = accounts.find(a => a.email.toLowerCase() === email);
+  if (acc && acc.role === "admin") return authError("That is an organizer account. Log in with its password instead.", "email");
+  const isNew = !acc;
+  if (!acc) {
+    acc = { id: makeId("user"), name, email, password: null, role: "user", provider: "google", contactEmail: email };
+    accounts.push(acc);
+    saveJSON(STORAGE.accounts, accounts);
+  }
+  finishLogin(acc, isNew ? "Welcome" : "Welcome back");
+}
+
+/* ---------------- ME (PROFILE) ---------------- */
+
+function renderProfile() {
+  const acc = accounts.find(a => a.id === currentUser.id) || {};
+  return `
+    <section class="page" style="max-width:560px">
+      <h1 class="page-title">Me</h1>
+      <p class="page-subtitle">Save your details once. They are filled in every time you register, and you can still edit them for each event.</p>
+      <form class="modal-form" onsubmit="saveProfile(event)" novalidate>
+        <div id="auth-error" class="auth-error hidden" role="alert"></div>
+        <label>Full name<input class="field" name="name" value="${escapeHTML(acc.name || currentUser.name)}"></label>
+        <label>Phone number<input class="field" name="phone" type="tel" value="${escapeHTML(acc.phone || "")}" placeholder="0917 123 4567"></label>
+        <label>Email<input class="field" name="email" type="email" value="${escapeHTML(acc.contactEmail || currentUser.email)}" placeholder="you@gmail.com"></label>
+        ${occBlock(acc.occupation, acc.occInfo)}
+        <button class="btn btn-primary" type="submit">Save my details</button>
+      </form>
+    </section>`;
+}
+
+function saveProfile(e) {
+  e.preventDefault();
+  const d = readDetails(e.target);
+  const problem = checkDetails(d);
+  if (problem) return authError(problem[0], problem[1]);
+  requirePhoneOtp(d, () => completeProfile(d));
+}
+
+function completeProfile(d) {
+  const acc = accounts.find(a => a.id === currentUser.id);
+  if (!acc) return;
+  acc.name = d.name; acc.phone = d.phone; acc.contactEmail = d.email; acc.occupation = d.occupation; acc.occInfo = d.occInfo;
+  currentUser.name = d.name;
+  saveJSON(STORAGE.accounts, accounts);
+  saveJSON(STORAGE.user, currentUser);
+  render();
+  toast("Details saved.");
+}
+
+/* ---------------- QR SCANNER ---------------- */
+
+let scanStream = null, scanFrame = null, scanResult = null;
+
+function renderScan() {
+  const r = scanResult;
+  return `
+    <section class="page" style="max-width:560px">
+      <h1 class="page-title">Scan QR</h1>
+      <p class="page-subtitle">${isAdmin() ? "Scan an attendee ticket to see their details, or scan an event QR to open it." : "Scan an event QR code to open the event and register."}</p>
+      <div class="scan-box">
+        <video id="scan-video" playsinline muted></video>
+        <canvas id="scan-canvas" class="hidden"></canvas>
+        <p id="scan-status" class="muted small">Camera is off.</p>
+        <div class="hero-buttons" style="margin-top:8px">
+          <button class="btn btn-primary" onclick="startScan()">Start camera</button>
+          <button class="btn btn-light" onclick="stopScan();setScanStatus('Camera is off.')">Stop</button>
+          <label class="btn btn-light">Use a QR photo<input type="file" accept="image/*" capture="environment" hidden onchange="scanFile(this)"></label>
+        </div>
+      </div>
+      ${r ? `<div class="scan-result ${r.ok ? "ok" : "bad"}" role="status"><strong>${r.ok ? "Done" : "Could not use this code"}</strong><br>${escapeHTML(r.text)}</div>` : ""}
+      <div class="section-head"><div><h2>No camera?</h2><p>Type the invitation code instead.</p></div></div>
+      <form class="code-form" onsubmit="joinByCode(event)">
+        <input class="field" name="eventCode" required maxlength="20" placeholder="e.g. ART204" aria-label="Event code">
+        <button class="btn btn-primary" type="submit">Find event</button>
+      </form>
+    </section>`;
+}
+
+function setScanStatus(text) {
+  const el = document.getElementById("scan-status");
+  if (el) el.textContent = text;
+}
+
+function startScan() {
+  scanResult = null;
+  if (typeof jsQR === "undefined") return setScanStatus("The scanner could not load. Use a QR photo or type the code.");
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return setScanStatus("This browser cannot open the camera. Use a QR photo or type the code.");
+  navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(stream => {
+    scanStream = stream;
+    const v = document.getElementById("scan-video");
+    if (!v) { stopScan(); return; }
+    v.srcObject = stream;
+    v.play();
+    setScanStatus("Point the camera at a QR code.");
+    scanTick();
+  }).catch(() => setScanStatus("Camera is blocked or unavailable. Allow camera access, or use a QR photo."));
+}
+
+function scanTick() {
+  const v = document.getElementById("scan-video"), c = document.getElementById("scan-canvas");
+  if (!v || !c) return;
+  if (v.readyState === v.HAVE_ENOUGH_DATA) {
+    c.width = v.videoWidth; c.height = v.videoHeight;
+    const ctx = c.getContext("2d", { willReadFrequently: true });
+    ctx.drawImage(v, 0, 0);
+    const img = ctx.getImageData(0, 0, c.width, c.height);
+    const code = jsQR(img.data, img.width, img.height);
+    if (code && code.data) { stopScan(); handleScan(code.data); return; }
+  }
+  scanFrame = requestAnimationFrame(scanTick);
+}
+
+function stopScan() {
+  if (scanFrame) cancelAnimationFrame(scanFrame);
+  scanFrame = null;
+  if (scanStream) { scanStream.getTracks().forEach(t => t.stop()); scanStream = null; }
+}
+
+function scanFile(input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  if (typeof jsQR === "undefined") return setScanStatus("The scanner could not load. Type the code instead.");
+  const img = new Image();
+  img.onload = () => {
+    const c = document.getElementById("scan-canvas");
+    c.width = img.naturalWidth; c.height = img.naturalHeight;
+    const ctx = c.getContext("2d", { willReadFrequently: true });
+    ctx.drawImage(img, 0, 0);
+    const data = ctx.getImageData(0, 0, c.width, c.height);
+    const code = jsQR(data.data, data.width, data.height);
+    URL.revokeObjectURL(img.src);
+    if (code && code.data) handleScan(code.data);
+    else setScanStatus("No QR code found in that photo. Try again with the code filling the frame.");
+  };
+  img.src = URL.createObjectURL(file);
+  input.value = "";
+}
+
+function handleScan(raw) {
+  const text = String(raw).trim();
+
+  if (text.startsWith("EE:T:")) {
+    const reg = registrations.find(r => r.id === text.slice(5));
+    const ev = reg && getEvent(reg.eventId);
+    const who = reg && reg.details ? reg.details.name : "This attendee";
+    if (!reg || !ev) scanResult = { ok: false, text: "Ticket not found. Tickets only work in the browser where they were created." };
+    else if (!isAdmin()) scanResult = { ok: false, text: "Only organizers can scan tickets. Log in as an organizer to view attendee details." };
+    else if (ev.creatorId !== currentUser.id) scanResult = { ok: false, text: "This ticket is for " + ev.title + ", which another organizer runs." };
+    else scanResult = { ok: true, text: "Valid ticket for " + ev.title + ". " + who + "'s details are open." };
+    render();
+    if (scanResult.ok) viewAttendee(reg.id);
+    return;
+  }
+
+  const m = text.match(/#(?:event=)?([A-Za-z0-9_~.%-]+)\s*$/);
+  const code = m ? decodeURIComponent(m[1]).toUpperCase() : text.toUpperCase();
+  const found = events.find(e => String(e.code).toUpperCase() === code && e.status === "published");
+  if (found) { scanResult = null; showEventDetails(found.id); toast("Event found."); return; }
+  scanResult = { ok: false, text: "This QR code is not an EventEase event or ticket." };
+  render();
+}
+
+function leaveEvent(id) {
+  const event = getEvent(id);
+  if (!event || !currentUser) return;
+
+  if (!isAttending(event)) {
+    toast("You have not joined this event.");
+    return;
+  }
+
+  askConfirm("Leave this event?", "Your seat for " + event.title + " will be released and your ticket QR will stop working.", "Yes, leave event", () => doLeave(id));
+}
+
+let confirmAction = null;
+
+function askConfirm(title, text, yesLabel, action) {
+  confirmAction = action;
+  document.getElementById("modal-root").innerHTML = `
+    <div class="modal-backdrop" onclick="if(event.target===this)closeModal()">
+      <section class="modal" role="alertdialog" aria-modal="true" aria-labelledby="cf-title">
+        <h2 id="cf-title" style="margin:0 0 6px">${escapeHTML(title)}</h2>
+        <p class="muted" style="margin:0 0 18px">${escapeHTML(text)}</p>
+        <div class="demo-row">
+          <button class="btn btn-light" onclick="closeModal()">Keep my seat</button>
+          <button class="btn btn-danger" onclick="runConfirm()">${escapeHTML(yesLabel)}</button>
+        </div>
+      </section>
+    </div>`;
+}
+
+function runConfirm() {
+  const action = confirmAction;
+  confirmAction = null;
+  closeModal();
+  if (action) action();
+}
+
+function doLeave(id) {
+  const event = getEvent(id);
+  if (!event || !currentUser) return;
+
+  event.attendees = event.attendees.filter(userId => userId !== currentUser.id);
+  registrations = registrations.filter(r =>
+    !(r.eventId === id && r.userId === currentUser.id)
+  );
+
+  saveEvents();
+  saveRegistrations();
+  render();
+  toast("You have left the event.");
+}
+
+/* ---------------- EVENT DETAILS ---------------- */
+
+function showEventDetails(id) {
+  const event = getEvent(id);
+  if (!event || event.status !== "published") {
+    toast("This event is not available.");
+    return;
+  }
+
+  activeEventId = id;
+  currentPage = "details";
+  closeModal();
+  render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function renderEventDetails(id) {
+  const event = getEvent(id);
+  if (!event || event.status !== "published") {
+    return `<section class="page"><div class="empty"><h3>Event not found</h3><button class="btn btn-primary" onclick="navigate('explore')">Explore events</button></div></section>`;
+  }
+
+  const joined = isAttending(event);
+  const creator = isAdmin() && currentUser.id === event.creatorId;
+  const full = availableSpots(event) <= 0;
+  const shareUrl = window.location.href.split("#")[0] + "#" + encodeURIComponent(event.code);
+
+  let mainAction = "";
+  if (joined) {
+    mainAction = `<button class="btn btn-success btn-block" disabled>✓ Registration confirmed</button>
+      <button class="btn btn-light btn-block" style="margin-top:8px" onclick="leaveEvent('${event.id}')">Leave event</button>${ticketBox(event)}`;
+  } else if (creator || isAdmin()) {
+    mainAction = `<button class="btn btn-light btn-block" disabled>${creator ? "You created this event" : "Organizers cannot register"}</button>`;
+  } else if (full) {
+    mainAction = `<button class="btn btn-light btn-block" disabled>Event is full</button>`;
+  } else {
+    mainAction = `<button class="btn btn-primary btn-block" onclick="joinEvent('${event.id}')">Join this event →</button>`;
+  }
+
+  return `
+    <section class="page">
+      <button class="btn btn-light btn-small" onclick="navigate('explore')">← Back to events</button>
+
+      <div class="detail-layout" style="margin-top:18px">
+        <div class="detail-panel">
+          <div class="detail-cover ${escapeHTML(event.cover || "")}">${escapeHTML(event.emoji || "🎉")}</div>
+          <div class="tag-row"><span class="tag">${escapeHTML(event.category)}</span><span class="tag approved">Published</span></div>
+          <h1 class="page-title">${escapeHTML(event.title)}</h1>
+          <p class="muted">Organized by ${escapeHTML(event.creatorName || "Event organizer")}</p>
+          <p>${escapeHTML(event.description)}</p>
+
+          <div class="detail-info">
+            <div>📅 <span><strong>${escapeHTML(formatDate(event.date))}</strong><br>${escapeHTML(formatTime(event.time))}</span></div>
+            <div>📍 <span><strong>Location</strong><br>${escapeHTML(event.location)}</span></div>
+            <div>👥 <span><strong>Attendees</strong><br>${attendeeCount(event)} of ${Number(event.capacity)} spots filled · ${availableSpots(event)} spots left</span></div>
+          </div>
+        ${creator ? attendeeList(event) : ""}
+        </div>
+
+        <aside class="detail-panel">
+          <h2>Join the experience</h2>
+          <p class="muted">Ready to attend? Register for this event below.</p>
+          ${mainAction}
+
+          <div class="code-box">
+            <span>EVENT INVITATION CODE</span>
+            <strong>${escapeHTML(event.code)}</strong>
+            <button class="btn btn-light btn-small" style="margin-top:10px" onclick="copyText('${escapeHTML(event.code)}')">Copy code</button>
+          </div>
+
+          <div class="qr-box">
+            <div class="qr-frame"><div id="qr-target" data-url="${escapeHTML(shareUrl)}"></div></div>
+            <span>Scan to open this event and register</span>
+            <button class="btn btn-light btn-small" style="margin-top:10px" onclick="window.print()">Print invitation</button>
+          </div>
+
+          <div class="form-group">
+            <label for="share-link">Share event link</label>
+            <input id="share-link" class="field" readonly value="${escapeHTML(shareUrl)}">
+            <button class="btn btn-light btn-block" onclick="copyText(document.getElementById('share-link').value)">Copy invitation link</button>
+          </div>
+
+          <p class="small muted" style="margin-top:16px">Share the code, link or QR code with people you want to invite. They can find the published event and register using their own account.</p>
+        </aside>
+      </div>
+    </section>`;
+}
+
+async function copyText(text) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+    } else {
+      const area = document.createElement("textarea");
+      area.value = text;
+      area.style.position = "fixed";
+      area.style.opacity = "0";
+      document.body.appendChild(area);
+      area.select();
+      const copied = document.execCommand("copy");
+      area.remove();
+      if (!copied) throw new Error("Copy failed");
+    }
+    toast("Copied to clipboard!");
+  } catch (error) {
+    toast("Copy was blocked by your browser. You can select and copy the text manually.");
+  }
+}
+
+/* ---------------- MY EVENTS ---------------- */
+
+function renderMyEvents() {
+  if (!isLoggedIn()) {
+    return `<section class="page"><div class="empty"><h3>Please log in first</h3><button class="btn btn-primary" onclick="showAuth('login')">Log in</button></div></section>`;
+  }
+
+  const admin = isAdmin();
+  const list = admin ? events.filter(e => e.creatorId === currentUser.id) : events.filter(e => isAttending(e));
+
+  return `
+    <section class="page">
+      <h1 class="page-title">${admin ? "My Events" : "My Tickets"}</h1>
+      <p class="page-subtitle">${admin ? "Events you created. Open one to share its code, link or QR code." : "Events you registered for."}</p>
+      ${admin ? `<p><button class="btn btn-primary" onclick="navigate('create')">＋ Create Event</button></p>` : ""}
+      <div class="event-grid">
+        ${list.length ? list.map(eventCard).join("") : `
+          <div class="empty" style="grid-column:1/-1">
+            <div class="empty-icon">${admin ? "🎉" : "🗓️"}</div>
+            <h3>${admin ? "No events yet" : "No tickets yet"}</h3>
+            <p>${admin ? "Create your first event." : "Find an event and register."}</p>
+            <button class="btn btn-primary" onclick="navigate('${admin ? "create" : "explore"}')">${admin ? "Create event" : "Explore events"}</button>
+          </div>`}
+      </div>
+    </section>`;
+}
+
+/* ---------------- LOGIN AND REGISTRATION ---------------- */
+
+function showAuth(mode, reason) {
+  const reg = mode === "register";
+  closeModal();
+
+  document.getElementById("modal-root").innerHTML = `
+    <div class="modal-backdrop" onclick="if(event.target===this)closeModal()">
+      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+        <div class="modal-top">
+          <div class="brand" style="font-size:17px"><span class="brand-icon" style="width:34px;height:34px;border-radius:11px">✦</span>EventEase</div>
+          <button class="close-btn" aria-label="Close" onclick="closeModal()">✕</button>
+        </div>
+
+        <div class="auth-tabs">
+          <button type="button" class="${reg ? "" : "on"}" onclick="showAuth('login')">Log in</button>
+          <button type="button" class="${reg ? "on" : ""}" onclick="showAuth('register')">Sign up</button>
+        </div>
+
+        <h2 id="auth-title" style="margin:14px 0 4px">${reg ? "Create a participant account" : "Welcome back"}</h2>
+        <p class="muted small" style="margin:0">${escapeHTML(reason || (reg ? "Sign up to register for events and keep your tickets." : "Log in to register for events or manage your own."))}</p>
+        <div id="auth-error" class="auth-error hidden" role="alert"></div>
+
+        <button type="button" class="g-btn" onclick="showGoogle()">${GLOGO} Continue with Google</button>
+        <div class="or-line">or use email</div>
+        <form class="modal-form" onsubmit="submitAuth(event,'${mode}')" novalidate>
+          ${reg ? `<label>Full name<input class="field" name="name" maxlength="70" placeholder="Your full name" autocomplete="name"></label>` : ""}
+          <label>Email<input class="field" name="email" type="email" placeholder="you@example.com" autocomplete="email"></label>
+          <label>Password<input class="field" name="password" type="password" placeholder="${reg ? "At least 6 characters" : "Your password"}" autocomplete="${reg ? "new-password" : "current-password"}"></label>
+          ${reg ? `<label>Confirm password<input class="field" name="confirmPassword" type="password" placeholder="Type it again" autocomplete="new-password"></label>` : ""}
+          <label class="show-pw"><input type="checkbox" onchange="document.querySelectorAll('#modal-root input[type=password],#modal-root input[data-pw]').forEach(i => { i.type = this.checked ? 'text' : 'password'; i.dataset.pw = '1'; })"> Show password</label>
+          <button class="btn btn-primary btn-block" type="submit">${reg ? "Create account" : "Log in"}</button>
+        </form>
+
+        ${reg ? `<p class="muted small" style="text-align:center">Organizer accounts are set up by the school or event team.</p>` : `
+          <div class="demo-label">No account yet? Try the demo</div>
+          <div class="demo-row">
+            <button class="btn btn-light btn-small" type="button" onclick="demoLogin('jordan@demo.com')">As participant</button>
+            <button class="btn btn-light btn-small" type="button" onclick="demoLogin('alex@demo.com')">As organizer</button>
+          </div>`}
+      </section>
+    </div>`;
+
+  const firstInput = document.querySelector("#modal-root form input");
+  if (firstInput) firstInput.focus();
+}
+
+function authError(message, field) {
+  const box = document.getElementById("auth-error");
+  if (!box) return;
+  box.textContent = message;
+  box.classList.remove("hidden");
+  const input = document.querySelector('#modal-root [name="' + field + '"]');
+  if (input) input.focus();
+}
+
+function finishLogin(account, welcome) {
+  currentUser = { id: account.id, name: account.name, email: account.email, role: account.role || "user" };
+  saveJSON(STORAGE.user, currentUser);
+  const join = pendingJoin;
+  pendingJoin = null;
+  closeModal();
+  if (isAdmin()) currentPage = "mine";
+  render();
+  toast((welcome || "Welcome back") + ", " + currentUser.name.split(" ")[0] + "!");
+  if (join && !isAdmin()) joinEvent(join);
+  else if (!isAdmin()) {
+    const a = accounts.find(x => x.id === currentUser.id);
+    if (a && !a.occupation) showOccupation();
+  }
+}
+
+function demoLogin(email) {
+  const account = accounts.find(a => a.email === email);
+  if (account) finishLogin(account, "Welcome");
+}
+
+function submitAuth(event, mode) {
+  event.preventDefault();
+  const data = new FormData(event.target);
+  const email = String(data.get("email") || "").trim().toLowerCase();
+  const password = String(data.get("password") || "");
+
+  if (!/^\S+@\S+\.\S+$/.test(email)) return authError("Enter a valid email address.", "email");
+
+  if (mode === "register") {
+    const name = String(data.get("name") || "").trim();
+    if (name.length < 2) return authError("Enter your full name.", "name");
+    if (password.length < 6) return authError("Use a password with at least 6 characters.", "password");
+    if (password !== String(data.get("confirmPassword") || "")) return authError("The two passwords do not match.", "confirmPassword");
+    if (accounts.some(a => a.email.toLowerCase() === email)) return authError("That email already has an account. Log in instead.", "email");
+
+    const account = { id: makeId("user"), name, email, password, role: "user" };
+    accounts.push(account);
+    saveJSON(STORAGE.accounts, accounts);
+    return finishLogin(account, "Welcome");
+  }
+
+  const found = accounts.find(a => a.email.toLowerCase() === email);
+  if (!found) return authError("No account uses that email. Sign up first.", "email");
+  if (found.provider === "google" && !found.password) return authError("This account uses Google. Choose Continue with Google.", "email");
+  if (found.password !== password) return authError("Wrong password. Try again.", "password");
+  finishLogin(found, "Welcome back");
+}
+
+function logout() {
+  currentUser = null;
+  localStorage.removeItem(STORAGE.user);
+
+  if (currentPage === "create" || currentPage === "mine") {
+    currentPage = "home";
+  }
+
+  closeModal();
+  render();
+  toast("You have logged out.");
+}
+
+/* ---------------- DIRECT EVENT LINKS ---------------- */
+
+function openSharedEvent() {
+  const match = window.location.hash.match(/^#(?:event=)?([A-Za-z0-9_~.%-]+)/i);
+  if (!match) return;
+
+  let code;
+  try {
+    code = decodeURIComponent(match[1]).trim().toUpperCase();
+  } catch (error) {
+    code = match[1].trim().toUpperCase();
+  }
+
+  const foundEvent = events.find(item =>
+    String(item.code).toUpperCase() === code &&
+    item.status === "published"
+  );
+
+  if (foundEvent) {
+    activeEventId = foundEvent.id;
+    currentPage = "details";
+    render();
+  } else {
+    currentPage = "home";
+    render();
+    toast("That event link could not be found in this browser's saved events.");
+  }
+}
+
+window.addEventListener("hashchange", openSharedEvent);
+
+render();
+
+if (window.location.hash.length > 1) {
+  openSharedEvent();
+}
+</script>
+</body>
+</html>
